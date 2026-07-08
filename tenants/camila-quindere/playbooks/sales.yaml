@@ -1,0 +1,27 @@
+version: 0.1.0
+playbooks:
+  - id: PB-SALES-INITIAL
+    name: Atendimento comercial inicial
+    goal: Acolher a lead, entender momento de estudo e conduzir qualificacao sem pressionar.
+    steps:
+      - greet
+      - ask_context
+      - qualify_maturity
+      - answer_with_method_positioning
+
+  - id: PB-SALES-PRICE
+    name: Apresentacao comercial quando ha pedido de preco
+    goal: Explicar valor percebido da mentoria antes de direcionar para fechamento.
+    steps:
+      - acknowledge_price_request
+      - reinforce_transformation
+      - present_offer_context
+      - ask_purchase_readiness
+
+  - id: PB-HUMAN-HANDOFF
+    name: Escalonamento humano
+    goal: Transferir de forma transparente para Camila ou equipe.
+    steps:
+      - explain_handoff
+      - register_reason
+      - pause_automation

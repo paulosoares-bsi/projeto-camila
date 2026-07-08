@@ -1,0 +1,6 @@
+version: 0.1.0
+products:
+  - id: mentoria-coletiva
+    name: Mentoria Coletiva
+    status: active
+    positioning: Mentoria especializada para mulheres que desejam se preparar para concursos policiais com metodo, constancia e acompanhamento.

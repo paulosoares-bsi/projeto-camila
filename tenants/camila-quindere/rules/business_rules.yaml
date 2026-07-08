@@ -1,0 +1,29 @@
+version: 0.1.0
+rules:
+  - id: BR-LEAD-001
+    name: Criar lead ao receber primeira mensagem
+    when:
+      eventType: MESSAGE_RECEIVED
+      leadExists: false
+    then:
+      state: NOVO
+      playbook: PB-SALES-INITIAL
+
+  - id: BR-SALES-001
+    name: Identificar pedido de preco
+    when:
+      eventType: MESSAGE_RECEIVED
+      intent: PRICE_REQUESTED
+    then:
+      state: LEAD_QUENTE
+      playbook: PB-SALES-PRICE
+
+  - id: BR-HANDOFF-001
+    name: Escalar quando houver decisao comercial excepcional
+    when:
+      eventType: MESSAGE_RECEIVED
+      flags:
+        - NEEDS_HUMAN_DECISION
+    then:
+      state: HUMAN_HANDOFF
+      playbook: PB-HUMAN-HANDOFF

@@ -1,0 +1,26 @@
+id: camila-quindere
+name: Camila Quindere
+status: active
+defaultLanguage: pt-BR
+timezone: America/Sao_Paulo
+
+providers:
+  whatsapp:
+    instance: camila
+
+knowledge:
+  main: knowledge/knowledge_master.md
+
+rules:
+  main: rules/business_rules.yaml
+
+playbooks:
+  - playbooks/sales.yaml
+  - playbooks/onboarding.yaml
+  - playbooks/customer_success.yaml
+
+prompts:
+  system: prompts/system.md
+
+products:
+  main: products/products.yaml

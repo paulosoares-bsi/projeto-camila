@@ -1,0 +1,28 @@
+environment: local
+
+database:
+  provider: postgres
+  url: ${DATABASE_URL}
+
+automation:
+  provider: n8n
+  baseUrl: ${N8N_BASE_URL}
+
+providers:
+  ai:
+    provider: mock
+    model: mock
+    apiKey: ${OPENAI_API_KEY}
+
+  whatsapp:
+    provider: mock
+    baseUrl: ${EVOLUTION_API_URL}
+    apiKey: ${EVOLUTION_API_KEY}
+    defaultInstance: camila
+
+  webhooks:
+    provider: n8n
+    signingSecret: ${WEBHOOK_SECRET}
+
+  payments:
+    provider: hotmart

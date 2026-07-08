@@ -1,0 +1,10 @@
+version: 0.1.0
+playbooks:
+  - id: PB-CS-001
+    name: Acompanhamento de Customer Success
+    goal: Manter a cliente engajada e identificar sinais de abandono.
+    steps:
+      - check_progress
+      - identify_blockers
+      - reinforce_method
+      - register_follow_up

@@ -1,0 +1,10 @@
+version: 0.1.0
+playbooks:
+  - id: PB-ONBOARDING-001
+    name: Onboarding apos compra aprovada
+    goal: Receber a nova cliente e orientar os primeiros passos.
+    steps:
+      - welcome_customer
+      - confirm_access
+      - explain_next_steps
+      - set_expectations
