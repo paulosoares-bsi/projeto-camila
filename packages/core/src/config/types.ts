@@ -1,4 +1,11 @@
-export type ProviderName = "openai" | "anthropic" | "evolution" | "n8n" | "hotmart" | "mock";
+export type ProviderName =
+  | "openai"
+  | "anthropic"
+  | "ollama"
+  | "evolution"
+  | "n8n"
+  | "hotmart"
+  | "mock";
 
 export interface PlatformConfig {
   environment: string;
@@ -12,22 +19,23 @@ export interface PlatformConfig {
   };
   providers: {
     ai: {
-      provider: "openai" | "anthropic" | "mock";
+      provider: Extract<ProviderName, "openai" | "anthropic" | "ollama" | "mock">;
       model: string;
       apiKey?: string;
+      baseUrl?: string;
     };
     whatsapp: {
-      provider: "evolution" | "mock";
+      provider: Extract<ProviderName, "evolution" | "mock">;
       baseUrl?: string;
       apiKey?: string;
       defaultInstance?: string;
     };
     webhooks: {
-      provider: "n8n" | "mock";
+      provider: Extract<ProviderName, "n8n" | "mock">;
       signingSecret?: string;
     };
     payments: {
-      provider: "hotmart" | "mock";
+      provider: Extract<ProviderName, "hotmart" | "mock">;
     };
   };
 }

@@ -1,0 +1,26 @@
+@host = http://localhost:8080
+@instance = SUA_INSTANCIA
+@apikey = SUA_API_KEY
+
+###
+# Health Check
+
+GET {{host}}
+
+###
+# Informações da instância
+
+GET {{host}}/instance/fetchInstances
+apikey: {{apikey}}
+
+###
+# Enviar texto
+
+POST {{host}}/message/sendText/{{instance}}
+apikey: {{apikey}}
+Content-Type: application/json
+
+{
+  "number": "5561999999999",
+  "text": "Mensagem de teste."
+}

@@ -1,0 +1,70 @@
+### Health
+
+GET http://localhost:3333/health
+
+###
+
+### Mensagem simples
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999991",
+  "messageId": "{{$timestamp}}",
+  "text": "Oi, queria saber o valor da mentoria",
+  "channel": "whatsapp"
+}
+
+###
+
+### Garantia
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999992",
+  "messageId": "{{$timestamp}}",
+  "text": "Tem garantia?",
+  "channel": "whatsapp"
+}
+
+###
+
+### Suporte
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999993",
+  "messageId": "{{$timestamp}}",
+  "text": "Já sou aluna e preciso de ajuda",
+  "channel": "whatsapp"
+}
+
+###
+
+### Compra
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999994",
+  "messageId": "{{$timestamp}}",
+  "text": "Acabei de comprar e não sei por onde começar",
+  "channel": "whatsapp"
+}
+
+### Teste da API
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999991",
+  "text": "Olá",
+  "channel": "whatsapp"
+}

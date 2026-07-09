@@ -2,7 +2,7 @@ import type { PlatformConfig } from "../config/types.js";
 import type { PlatformEvent, IncomingMessagePayload } from "./types.js";
 import type { AIProvider } from "../providers/ai/types.js";
 import type { WhatsAppProvider } from "../providers/whatsapp/types.js";
-import { PromptBuilder } from "../prompt/prompt-builder.js";
+import { PromptBuilder } from "../prompt-builder/prompt-builder.js";
 import { evaluateRules } from "../rules/rules-engine.js";
 import { loadTenantContext } from "../tenants/tenant-loader.js";
 import type { EventStore } from "../database/event-store.js";

@@ -1,18 +1,20 @@
 # NEXT_SPRINT
+
 Este documento representa exclusivamente o objetivo da sprint atual.
+
 Ao término da sprint ele deverá ser substituído pelo conteúdo da próxima sprint.
 
 ## Sprint
 
-4.1
+4.2
 
 ---
 
 # Objetivo
 
-Implementar a primeira versão funcional da camada de IA local do Projeto Camila.
+Consolidar a utilização do Ollama na plataforma, atualizar o modelo oficial para `qwen3:4b-instruct` e preparar a arquitetura para a próxima evolução da camada de IA.
 
-Substituir o MockAIProvider pela integração com o Ollama utilizando o modelo qwen3:4b.
+Esta sprint também consolida o novo fluxo oficial de desenvolvimento entre ChatGPT e o Agente de Desenvolvimento.
 
 ---
 
@@ -20,11 +22,13 @@ Substituir o MockAIProvider pela integração com o Ollama utilizando o modelo q
 
 Esta sprint contempla apenas:
 
-- integração com o Ollama;
-- criação do AI Provider Local;
-- primeira geração real de respostas pela IA;
-- integração com a arquitetura existente;
-- preparação da arquitetura para futura implementação de Tool Calling.
+- atualizar toda a plataforma para utilizar `qwen3:4b-instruct`;
+- validar o comportamento do novo modelo;
+- revisar o OllamaProvider;
+- revisar prompts e parâmetros do modelo;
+- validar a compatibilidade da arquitetura existente;
+- manter a arquitetura preparada para futura implementação de Tool Calling;
+- revisar a documentação da camada de IA.
 
 ---
 
@@ -33,13 +37,13 @@ Esta sprint contempla apenas:
 Ao final da sprint deverá ser possível:
 
 - enviar uma mensagem para o sistema;
-- montar o contexto da conversa;
+- montar corretamente o contexto da conversa;
 - construir o prompt;
 - enviar o prompt ao Ollama;
-- receber a resposta do modelo;
-- devolver a resposta ao fluxo existente.
-
-A arquitetura deve permanecer preparada para futura troca de modelo sem impacto significativo na lógica de negócio.
+- utilizar oficialmente o modelo `qwen3:4b-instruct`;
+- receber respostas do novo modelo;
+- devolver a resposta ao fluxo existente;
+- manter a possibilidade de troca futura do modelo sem alterações na regra de negócio.
 
 ---
 
@@ -50,28 +54,48 @@ Não:
 - alterar componentes estáveis sem necessidade;
 - modificar a arquitetura existente;
 - criar overengineering;
-- criar dependência forte do Qwen;
-- mover regras de negócio para o n8n.
+- criar dependência forte do modelo utilizado;
+- mover regras de negócio para o n8n;
+- utilizar modelos locais como agente de desenvolvimento.
 
 Priorizar:
 
 - simplicidade;
-- baixo consumo de memória;
-- baixo consumo de CPU;
-- mínimo consumo de tokens;
-- facilidade de manutenção.
+- baixo consumo de recursos;
+- facilidade de manutenção;
+- desacoplamento;
+- estabilidade da arquitetura.
 
 ---
 
-# Impactos Esperados
+# Fluxo Oficial da Sprint
 
-Novos componentes esperados:
+Toda implementação deverá seguir obrigatoriamente o fluxo abaixo:
 
-- LocalAIProvider (ou equivalente);
-- integração com Ollama;
-- abstração mínima para futura troca de modelo.
+1. ChatGPT realiza auditoria do projeto.
+2. ChatGPT pesquisa documentação oficial quando necessário.
+3. ChatGPT define arquitetura e estratégia.
+4. ChatGPT produz um prompt objetivo para o Agente de Desenvolvimento.
+5. Agente de Desenvolvimento implementa o escopo aprovado.
+6. Agente executa testes.
+7. Agente realiza operações de Git quando solicitado.
+8. ChatGPT realiza auditoria final.
+9. Documentação atualizada.
 
-Componentes existentes devem sofrer o mínimo possível de alterações.
+---
+
+# Escopo Fora da Sprint
+
+Não faz parte desta sprint:
+
+- migração para IA em nuvem da plataforma;
+- Tool Calling;
+- memória de longo prazo;
+- RAG;
+- embeddings;
+- busca semântica;
+- otimizações prematuras;
+- substituição do agente de desenvolvimento.
 
 ---
 
@@ -79,12 +103,26 @@ Componentes existentes devem sofrer o mínimo possível de alterações.
 
 Ao concluir a sprint:
 
-- código implementado;
-- testes realizados;
+- plataforma utilizando oficialmente `qwen3:4b-instruct`;
+- testes executados;
+- validação do novo modelo;
+- documentação atualizada;
 - PROJECT_STATE.md atualizado;
 - PROJECT_HISTORY.md atualizado;
-- registro das decisões arquiteturais;
-- registro das lições aprendidas.
+- decisões arquiteturais registradas;
+- lições aprendidas registradas.
+
+---
+
+# Lições Incorporadas
+
+Durante esta sprint deverão ser observados os seguintes princípios:
+
+- arquitetura é definida antes da implementação;
+- decisões devem ser baseadas em documentação oficial e experiências consolidadas;
+- benchmarks próprios somente após análise técnica prévia;
+- evitar experimentos que apresentem baixa probabilidade de sucesso para o hardware disponível;
+- otimizar o trabalho do Agente de Desenvolvimento utilizando prompts objetivos e escopo reduzido.
 
 ---
 
@@ -94,4 +132,8 @@ Sempre utilizar o código-fonte como fonte da verdade.
 
 Caso sejam identificadas divergências entre documentação e implementação, registrar antes de prosseguir.
 
-Evitar consumo desnecessário de tokens durante a implementação.
+O n8n poderá permanecer desativado enquanto não fizer parte do escopo desta sprint.
+
+A IA utilizada pela plataforma e a IA utilizada durante o desenvolvimento possuem responsabilidades distintas e não devem ser confundidas.
+
+A arquitetura deverá permanecer preparada para futura substituição do modelo de IA sem impacto na lógica de negócio.

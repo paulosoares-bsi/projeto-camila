@@ -1,61 +1,139 @@
 # Webhooks Hotmart e Eventos da Plataforma
 
-## Endpoint
+Este documento define os webhooks oficiais da Hotmart, os eventos internos da plataforma e o mapeamento entre ambos.
 
-Endpoint preferencial para Hotmart:
+O objetivo é desacoplar eventos externos da regra de negócio do Projeto Camila.
+
+---
+
+# Endpoint Oficial
+
+Endpoint preferencial:
 
 ```text
 POST /webhooks/:tenantId/platform/hotmart
 ```
 
-Alias curto:
+Alias compatível:
 
 ```text
 POST /webhooks/:tenantId/hotmart
 ```
 
-Para Camila:
+Exemplo para o tenant Camila:
 
 ```text
 POST /webhooks/camila-quindere/platform/hotmart
 ```
 
-No n8n:
+Durante o desenvolvimento via Docker:
 
 ```text
 http://api:3333/webhooks/camila-quindere/platform/hotmart
 ```
 
-## Eventos Hotmart importantes para a Camila
+---
 
-| Hotmart | Evento interno | Prioridade | Uso na plataforma |
-| --- | --- | --- | --- |
-| Venda aprovada | `PURCHASE_APPROVED` | Alta | Registrar compra, mudar estado para cliente, iniciar onboarding e Customer Success. |
-| Venda reembolsada | `PURCHASE_REFUNDED` | Alta | Registrar reembolso, encerrar/corrigir jornada e iniciar playbook de feedback. |
-| Pedido de reembolso | `REFUND_REQUESTED` | Alta | Coletar motivo, oferecer conversa com Camila e registrar risco. |
-| Carrinho abandonado | `CART_ABANDONED` | Alta | Iniciar recuperacao comercial sem pressao. |
-| Venda criada | `PURCHASE_CREATED` | Media | Registrar tentativa de compra e enriquecer funil. |
-| Venda atrasada | `PURCHASE_DELAYED` | Media | Acompanhar pagamento pendente/atrasado. |
-| Venda expirada | `PURCHASE_EXPIRED` | Media | Encerrar tentativa de pagamento e disparar follow-up leve. |
-| Venda cancelada | `PURCHASE_CANCELED` | Media | Registrar cancelamento e evitar automacoes de cliente ativa. |
-| Venda completa | `PURCHASE_COMPLETE` | Baixa/Media | Confirmar conclusao financeira quando aplicavel. |
-| Assinatura criada | `SUBSCRIPTION_CREATED` | Baixa no MVP | Util se a mentoria virar assinatura/recorrencia. |
-| Assinatura cancelada | `SUBSCRIPTION_CANCELED` | Baixa no MVP | Util se houver recorrencia. |
+# Fluxo
 
-## Eventos importantes que nao sao Hotmart por padrao
+```text
+Hotmart
 
-Esses devem ser gerados por integracoes da plataforma, n8n, area de membros ou rotinas agendadas:
+↓
 
-| Evento interno | Origem provavel | Regra da Camila |
-| --- | --- | --- |
-| `FIRST_ACCESS` | Area de membros/plataforma de aulas | Cliente fez o primeiro acesso apos compra. |
-| `NO_PLATFORM_ACCESS` | Rotina agendada/n8n | Cliente nao acessou em 24h, 2 dias ou 7 dias. |
-| `STUDENT_RECOVERED` | Area de membros/plataforma de aulas | Cliente voltou a acessar apos risco de abandono. |
-| `MENTORING_ENDING` | Rotina agendada/banco | Dez dias antes do fim da mentoria, alertar Camila. |
+Webhook
 
-## Eventos que vamos tratar depois
+↓
 
-- Webhook de acesso da plataforma de aulas.
-- Job diario de verificacao de ausencia de acesso.
-- Job de fim de mentoria.
-- Playbooks especificos para onboarding, recuperacao e reembolso.
+API
+
+↓
+
+Event Processor
+
+↓
+
+Evento Interno
+
+↓
+
+Rules Engine
+
+↓
+
+Playbooks
+
+↓
+
+Persistência
+
+↓
+
+IA / WhatsApp
+```
+
+A partir do momento em que o webhook é recebido, toda a plataforma deve trabalhar apenas com eventos internos.
+
+---
+
+# Eventos Hotmart Prioritários
+
+| Hotmart | Evento Interno | Prioridade | Ação |
+|----------|----------------|------------|------|
+| Venda aprovada | `PURCHASE_APPROVED` | Alta | Registrar compra, converter Lead em Cliente, iniciar Onboarding e Customer Success. |
+| Venda reembolsada | `PURCHASE_REFUNDED` | Alta | Registrar reembolso, interromper jornada e iniciar playbook de feedback. |
+| Pedido de reembolso | `REFUND_REQUESTED` | Alta | Registrar solicitação, coletar motivo e oferecer atendimento humano quando aplicável. |
+| Carrinho abandonado | `CART_ABANDONED` | Alta | Iniciar playbook de recuperação. |
+| Venda criada | `PURCHASE_CREATED` | Média | Registrar intenção de compra e enriquecer o funil. |
+| Venda atrasada | `PURCHASE_DELAYED` | Média | Acompanhar pagamento pendente. |
+| Venda expirada | `PURCHASE_EXPIRED` | Média | Encerrar tentativa de pagamento e iniciar follow-up leve. |
+| Venda cancelada | `PURCHASE_CANCELED` | Média | Registrar cancelamento e impedir automações de clientes ativos. |
+| Venda concluída | `PURCHASE_COMPLETE` | Baixa | Confirmar encerramento do processo financeiro quando aplicável. |
+| Assinatura criada | `SUBSCRIPTION_CREATED` | Baixa | Utilizada apenas caso existam produtos recorrentes. |
+| Assinatura cancelada | `SUBSCRIPTION_CANCELED` | Baixa | Utilizada apenas caso existam produtos recorrentes. |
+
+---
+
+# Eventos Internos da Plataforma
+
+Os eventos abaixo não são enviados pela Hotmart.
+
+São produzidos pelo próprio Projeto Camila, por integrações ou por rotinas agendadas.
+
+| Evento | Origem | Objetivo |
+|--------|--------|----------|
+| `FIRST_ACCESS` | Plataforma de aulas | Detectar primeiro acesso do aluno. |
+| `NO_PLATFORM_ACCESS` | Rotina agendada | Identificar alunos que ainda não acessaram o conteúdo. |
+| `STUDENT_RECOVERED` | Plataforma de aulas | Registrar retorno do aluno após período de ausência. |
+| `MENTORING_ENDING` | Rotina agendada | Avisar proximidade do encerramento da mentoria. |
+
+---
+
+# Eventos Futuros
+
+Ainda não fazem parte do MVP:
+
+- Webhook da plataforma de aulas.
+- Monitoramento automático de acesso dos alunos.
+- Monitoramento automático do encerramento da mentoria.
+- Eventos provenientes de Instagram.
+- Eventos provenientes de Telegram.
+- Eventos provenientes de Email.
+
+---
+
+# Regras
+
+- A API apenas valida e transforma o webhook recebido.
+- Toda regra de negócio pertence ao Core.
+- O Event Processor converte eventos externos em eventos internos.
+- Playbooks trabalham apenas com eventos internos.
+- A IA nunca deve depender diretamente do formato do webhook da Hotmart.
+
+---
+
+# Observações
+
+Novos eventos da Hotmart poderão ser adicionados futuramente sem necessidade de alterar a arquitetura da plataforma.
+
+Basta criar o mapeamento entre o evento externo e o evento interno correspondente.

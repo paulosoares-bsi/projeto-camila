@@ -1,0 +1,16 @@
+@host = http://localhost:5678
+
+###
+# Health Check
+
+GET {{host}}
+
+###
+# Webhook de teste
+
+POST {{host}}/webhook/test
+Content-Type: application/json
+
+{
+  "message": "teste"
+}

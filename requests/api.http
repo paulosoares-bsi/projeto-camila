@@ -1,0 +1,11 @@
+@host = http://localhost:3000
+
+###
+# Health Check
+
+GET {{host}}/health
+
+###
+# Exemplo de endpoint
+
+# Adicione aqui os endpoints da API do Projeto Camila.

@@ -1,0 +1,31 @@
+@host = http://localhost:3000
+
+###
+# Simular Compra Aprovada
+
+POST {{host}}/webhooks/hotmart
+Content-Type: application/json
+
+{
+  "event": "PURCHASE_APPROVED"
+}
+
+###
+# Simular Reembolso
+
+POST {{host}}/webhooks/hotmart
+Content-Type: application/json
+
+{
+  "event": "PURCHASE_REFUNDED"
+}
+
+###
+# Simular Cancelamento
+
+POST {{host}}/webhooks/hotmart
+Content-Type: application/json
+
+{
+  "event": "SUBSCRIPTION_CANCELED"
+}

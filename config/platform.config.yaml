@@ -10,8 +10,9 @@ automation:
 
 providers:
   ai:
-    provider: mock
-    model: mock
+    provider: ollama
+    model: qwen3:4b
+    baseUrl: ${OLLAMA_BASE_URL}
     apiKey: ${OPENAI_API_KEY}
 
   whatsapp:

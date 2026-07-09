@@ -1,0 +1,24 @@
+### Health
+GET http://localhost:3333/health
+
+###
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999991",
+  "text": "Olá",
+  "channel": "whatsapp"
+}
+
+###teste de IA
+
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5585999999991",
+  "text": "Qual o valor da mentoria?",
+  "channel": "whatsapp"
+}

@@ -1,35 +1,95 @@
 # PROJECT_STATE
 
-# ⚠️ Instruções para IA / Codex
+> Documento oficial do estado atual do Projeto Camila.
+>
+> Última atualização: 2026-07-09
+>
+> Este documento deve ser considerado a referência oficial do projeto.
 
-Este documento representa o estado oficial do Projeto Camila.
+---
+
+# ⚠️ Instruções para a IA
 
 Antes de realizar qualquer alteração:
 
 1. Leia integralmente este documento.
-2. Analise o código-fonte do repositório.
-3. Em caso de divergência entre este documento e o código, considere o código como fonte da verdade e registre a divergência antes de prosseguir.
-4. Consulte o PROJECT_HISTORY.md apenas quando precisar compreender decisões arquiteturais ou a evolução do projeto.
-5. Não proponha alterações arquiteturais que contrariem as decisões registradas neste documento sem apresentar justificativa técnica.
-6. Ao concluir a sprint, atualize este documento refletindo o novo estado do projeto e registre a evolução no PROJECT_HISTORY.md.
+2. Leia o NEXT_SPRINT.md.
+3. Analise o código-fonte do repositório.
+4. Considere sempre o código como fonte da verdade.
+5. Caso exista divergência entre documentação e código, informe a divergência antes de prosseguir.
+6. Consulte o PROJECT_HISTORY.md apenas quando precisar compreender a evolução arquitetural do projeto.
+7. Não proponha mudanças arquiteturais fora do escopo da sprint.
+8. Ao concluir a sprint, atualize este documento e registre a evolução no PROJECT_HISTORY.md.
 
 ---
 
-## Economia de Recursos
+# Metodologia de Desenvolvimento
+
+O Projeto Camila utiliza duas inteligências distintas com responsabilidades claramente separadas.
+
+## ChatGPT
+
+Responsável por:
+
+- auditoria do código;
+- investigação técnica;
+- pesquisa de documentação oficial;
+- pesquisa de benchmarks e experiências da comunidade;
+- arquitetura;
+- revisão das implementações;
+- identificação de causa raiz;
+- validação das alterações;
+- planejamento das sprints;
+- elaboração dos prompts para o Agente de Desenvolvimento.
+
+Toda decisão arquitetural deve ser tomada pelo ChatGPT antes da implementação.
+
+---
+
+## Agente de Desenvolvimento
+
+Responsável por:
+
+- implementar alterações previamente delimitadas;
+- refatorações locais;
+- correções de bugs;
+- execução de testes;
+- operações de Git (branch, commit, merge quando solicitado).
+
+O Agente NÃO deve:
+
+- realizar auditorias amplas;
+- alterar arquitetura por iniciativa própria;
+- tomar decisões de negócio;
+- realizar grandes refatorações fora do escopo da sprint.
+
+Sempre receberá:
+
+- escopo fechado;
+- objetivos claros;
+- restrições explícitas.
+
+---
+
+# Economia de Recursos
 
 Toda implementação deve priorizar:
 
-- mínimo consumo de tokens da IA;
+- mínimo consumo de tokens;
 - mínimo consumo de CPU;
 - mínimo consumo de RAM;
 - mínimo número de chamadas ao modelo;
-- reutilização de contexto sempre que possível;
-- prompts curtos e objetivos;
+- reutilização de contexto;
+- prompts objetivos;
 - evitar processamento desnecessário.
+
+Sempre que uma alteração puder ser realizada manualmente com segurança, ela deve ser preferida em vez de consumir recursos do Agente de Desenvolvimento.
+
+---
 
 # Objetivo
 
-O Projeto Camila é uma plataforma de atendimento inteligente via WhatsApp para comercialização e suporte da Mentoria Camila Quinderé.
+O Projeto Camila é uma plataforma multi-tenant de atendimento inteligente via WhatsApp para comercialização e suporte da Mentoria Camila Quinderé.
 
 A plataforma deverá ser capaz de:
 
@@ -38,8 +98,8 @@ A plataforma deverá ser capaz de:
 - executar playbooks comerciais;
 - realizar Customer Success;
 - consultar Knowledge Base;
-- utilizar IA local;
-- evoluir para um agente baseado em Tool Calling.
+- utilizar IA local para atendimento;
+- evoluir futuramente para um agente baseado em Tool Calling.
 
 ---
 
@@ -47,16 +107,46 @@ A plataforma deverá ser capaz de:
 
 ## Stack
 
-- Evolution API
-- n8n
+- Docker Compose
 - PostgreSQL
+- n8n
+- API
+- Worker
 - Ollama
-- Knowledge Base
-- Playbooks
+- Evolution API
 
-## Organização dos Tenants
+---
 
-Cada tenant possui seus próprios recursos de negócio.
+# IA da Plataforma
+
+Runtime oficial:
+
+Ollama
+
+Modelo oficial:
+
+**qwen3:4b-instruct**
+
+A arquitetura deve permanecer preparada para futura migração para outros modelos locais sem alterar a lógica de negócio.
+
+---
+
+# IA de Desenvolvimento
+
+A IA utilizada durante o desenvolvimento é independente da IA utilizada pela plataforma.
+
+Responsabilidades:
+
+- arquitetura → ChatGPT;
+- implementação → Agente de Desenvolvimento.
+
+O modelo utilizado pelo Agente poderá mudar ao longo do projeto sem impactar a arquitetura da plataforma.
+
+---
+
+# Organização dos Tenants
+
+Cada tenant possui recursos próprios.
 
 Estrutura:
 
@@ -69,23 +159,7 @@ tenants/<tenant>/
 - rules/
 - tenant.yaml
 
-Não existem recursos globais de negócio na raiz do projeto.
-
-## Modelo de IA
-
-Runtime:
-
-Ollama
-
-Modelo atual:
-
-qwen3:4b
-
-Endpoint:
-
-http://localhost:11434
-
-A arquitetura deve permanecer preparada para troca futura do modelo de IA sem alterações relevantes na lógica de negócio.
+Não existem recursos globais de negócio.
 
 ---
 
@@ -93,116 +167,238 @@ A arquitetura deve permanecer preparada para troca futura do modelo de IA sem al
 
 ## Evolution API
 
-- comunicação com WhatsApp
+Comunicação com WhatsApp.
+
+---
 
 ## n8n
 
-- orquestração dos fluxos
-- integração entre serviços
-- disparo de eventos
+Orquestração.
+
+Integração entre serviços.
+
+Disparo de eventos.
+
+Não contém regra de negócio.
+
+Durante o desenvolvimento poderá permanecer desativado quando não fizer parte da sprint.
+
+---
 
 ## API
 
-- interface externa
+Recepção de webhooks e interface externa.
+
+---
 
 ## Worker
 
-- processamento assíncrono
+Processamento assíncrono.
+
+---
 
 ## Core
 
-- regras de negócio
-- contexto da conversa
-- construção de prompts
-- tomada de decisão
-- futura integração com ferramentas
+Responsável por:
+
+- regras de negócio;
+- PromptBuilder;
+- contexto da conversa;
+- tomada de decisão;
+- integração futura com ferramentas.
+
+---
 
 ## PostgreSQL
 
-- persistência
+Persistência.
+
+---
 
 ## Knowledge Base
 
-Cada tenant possui sua própria Knowledge Base.
+Cada tenant possui sua própria base.
 
-Localização:
+Local:
 
 tenants/<tenant>/knowledge/knowledge_master.md
 
-A IA deve utilizar exclusivamente a Knowledge Base do tenant ativo.
-
-Não existe Knowledge Base global.
+---
 
 ## Playbooks
 
-- estratégia comercial
+Estratégia comercial do tenant.
+
+---
 
 ## IA
 
 Responsável por:
 
 - interpretar mensagens;
+- responder;
 - tomar decisões;
-- gerar respostas;
 - futuramente utilizar Tool Calling.
 
 ---
 
-# Componentes Implementados
+# Estado Atual do Projeto
 
-Atualmente o projeto possui:
+Implementado:
 
-- arquitetura multi-tenant
-- API
-- Worker
-- Event Processor
-- Prompt Builder
-- PostgreSQL
-- Evolution Provider
-- Hotmart Provider
-- Lead Repository
-- Message Repository
-- Contexto de Conversa
-- Knowledge Base
-- Playbooks
+- arquitetura multi-tenant;
+- Docker Compose;
+- API;
+- Worker;
+- Event Store;
+- PostgreSQL;
+- PromptBuilder;
+- Message Repository;
+- Lead Repository;
+- Contexto de Conversa;
+- MockAIProvider;
+- OllamaProvider;
+- Evolution Provider;
+- Hotmart Provider (estrutura);
+- Knowledge Base;
+- Playbooks.
 
 ---
 
-# Componentes Pendentes
+# Pendências Conhecidas
 
-Próximas evoluções previstas:
+Sprint 4.2
 
-- AI Provider Local
-- Tool Calling
-- RAG
-- Embeddings
-- Busca Semântica
-- Memória de longo prazo
-- Customer Success automatizado
-- Recuperação de carrinho
-- Agente completo
+- atualizar toda a plataforma para utilizar qwen3:4b-instruct;
+- validar comportamento do novo modelo;
+- manter n8n desativado enquanto não fizer parte da sprint;
+- continuar evolução da camada de IA.
 
 ---
 
 # Decisões Arquiteturais
 
-Estas decisões devem ser preservadas:
+Estas decisões devem ser preservadas.
 
-- IA exclusivamente local.
-- Ollama é o runtime oficial.
-- Modelo inicial: qwen3:4b.
-- Arquitetura preparada para futura migração para qwen3:8b.
-- Não utilizar APIs externas de IA.
-- Toda regra de negócio permanece no Core.
-- O n8n atua apenas como orquestrador.
-- A IA deve evoluir para utilização de Tool Calling.
-- Evitar grandes cadeias de IFs no n8n.
-- Priorizar simplicidade.
-- Evitar overengineering.
-- Priorizar baixo consumo de CPU.
-- Priorizar baixo consumo de memória.
-- Priorizar baixo consumo de tokens.
-- Toda personalização de negócio pertence ao tenant.
+## Lead
+
+Lead possui UUID próprio.
+
+Nunca utilizar telefone como chave principal.
+
+---
+
+## Identidade
+
+Será criada futuramente a entidade:
+
+lead_identities
+
+Objetivo:
+
+Associar um mesmo Lead aos diversos canais:
+
+- WhatsApp;
+- Hotmart;
+- Telegram;
+- Instagram;
+- Email.
+
+---
+
+## IA da Plataforma
+
+A IA da plataforma permanece exclusivamente local utilizando Ollama.
+
+---
+
+## IA de Desenvolvimento
+
+Modelos locais não serão utilizados como cérebro do Agente de Desenvolvimento nesta fase do projeto.
+
+O desenvolvimento continuará utilizando ChatGPT para decisões e um Agente de Desenvolvimento baseado em modelos de nuvem para implementação.
+
+Esta decisão foi tomada após benchmark prático de desempenho.
+
+---
+
+## Core
+
+Toda regra de negócio permanece no Core.
+
+---
+
+## n8n
+
+Atua apenas como orquestrador.
+
+---
+
+## PromptBuilder
+
+Permanece desacoplado do modelo de IA.
+
+Recebe contexto.
+
+Retorna apenas uma string.
+
+---
+
+## Histórico
+
+O histórico deverá evoluir para conter:
+
+- data;
+- hora;
+- canal;
+- eventos do sistema;
+- marcadores temporais.
+
+---
+
+# Observação Arquitetural
+
+Existem atualmente duas pastas semelhantes:
+
+packages/core/src/prompt
+
+↓
+
+Código do PromptBuilder.
+
+packages/core/src/prompts
+
+↓
+
+System prompts dos tenants.
+
+Isso é intencional.
+
+Essas pastas NÃO devem ser removidas nem unificadas.
+
+Existe uma refatoração planejada para uma sprint futura.
+
+---
+
+# Refatorações Planejadas
+
+Renomear apenas nomenclatura.
+
+packages/core/src/prompt
+
+↓
+
+packages/core/src/prompt-builder
+
+packages/core/src/prompts
+
+↓
+
+packages/core/src/system-prompts
+
+Essa alteração deverá modificar apenas diretórios e imports.
+
+Não deverá alterar comportamento.
 
 ---
 
@@ -211,22 +407,25 @@ Estas decisões devem ser preservadas:
 Toda implementação futura deve priorizar:
 
 1. simplicidade;
-2. manutenibilidade;
-3. baixo acoplamento;
-4. alta coesão;
-5. extensibilidade;
+2. baixo acoplamento;
+3. alta coesão;
+4. extensibilidade;
+5. manutenibilidade;
 6. compatibilidade com futuras sprints;
 7. economia de recursos;
-8. economia de tokens.
+8. estabilidade da arquitetura;
+9. decisões baseadas em documentação oficial, benchmarks e experiências consolidadas da comunidade antes da adoção de novas tecnologias.
 
 ---
 
-## Fluxo obrigatório de toda Sprint
+# Fluxo Obrigatório de Toda Sprint
 
-1. Ler este documento.
-2. Ler o NEXT_SPRINT.md.
+1. Ler PROJECT_STATE.md.
+2. Ler NEXT_SPRINT.md.
 3. Analisar o código.
-4. Propor a estratégia.
+4. Apresentar estratégia.
 5. Aguardar aprovação.
 6. Implementar.
-7. Atualizar a documentação.
+7. Executar testes.
+8. Atualizar Git (quando solicitado).
+9. Atualizar a documentação.

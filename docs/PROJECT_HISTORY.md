@@ -39,6 +39,7 @@ Construir a fundação técnica do Projeto Camila.
 
 - Definir corretamente as responsabilidades desde o início reduz retrabalho.
 - Recursos específicos de negócio (Knowledge Base, Playbooks, Prompts e Regras) devem permanecer sempre dentro do tenant correspondente, evitando duplicação de arquivos globais.
+- Nunca considerar `node_modules` parte do backup do projeto. Em caso de movimentação entre discos ou criação de arquivos ZIP, remover `node_modules` e reconstruí-lo posteriormente com `pnpm install`. Isso evita problemas com links simbólicos do PNPM e reduz drasticamente o tamanho dos backups.
 
 ---
 
@@ -141,27 +142,63 @@ Consolidar a arquitetura antes da implantação da IA.
 # Sprint 4.1
 
 **Início:** 08/07/2026  
-**Conclusão:** _(preencher ao finalizar)_  
-**Status:** Em andamento
+**Conclusão:** 09/07/2026  
+**Status:** Concluída
 
 ## Objetivo
 
-Implantar a primeira versão funcional da camada de IA local.
+Implantar a primeira versão funcional da camada de IA local da plataforma.
 
 ## Escopo
 
 - integração com Ollama;
-- utilização do modelo qwen3:4b;
 - substituição do MockAIProvider;
 - primeira resposta gerada pela IA;
-- preparação da arquitetura para Tool Calling.
+- preparação da arquitetura para Tool Calling;
+- benchmark de agentes de desenvolvimento utilizando modelos locais.
+
+## Principais Implementações
+
+- criação do OllamaProvider;
+- integração na factory de providers;
+- uso da API oficial do Ollama;
+- atualização do modelo oficial para **qwen3:4b-instruct**;
+- manutenção do MockAIProvider para testes;
+- consolidação da arquitetura preparada para futura troca de modelo.
+
+## Benchmark Realizado
+
+Foram avaliadas as seguintes alternativas para utilização de IA local como agente de desenvolvimento:
+
+- Codex + Ollama;
+- Cline + Ollama;
+- Aider + Ollama.
+
+### Resultado
+
+- Codex + Ollama apresentou problemas de integração e reconexão.
+- Cline funcionou, porém consumiu contexto excessivo para um modelo de 4B.
+- Aider apresentou melhor arquitetura, porém desempenho insuficiente para o porte do projeto, com tarefas simples levando vários minutos e tarefas maiores atingindo timeout.
 
 ## Decisões Arquiteturais
 
-- abandono definitivo das APIs externas de IA;
-- Ollama adotado como runtime oficial;
-- arquitetura preparada para futura troca de modelo;
-- foco em baixo consumo de tokens e recursos computacionais.
+- Ollama adotado como runtime oficial da IA da plataforma.
+- Modelo oficial atualizado para **qwen3:4b-instruct**.
+- A arquitetura permanece preparada para futura troca de modelo.
+- A IA utilizada pela plataforma passa a ser tratada separadamente da IA utilizada durante o desenvolvimento.
+- Modelos locais **não serão utilizados como cérebro do Agente de Desenvolvimento** nesta fase do projeto.
+- O desenvolvimento continuará utilizando ChatGPT para arquitetura e decisões, aliado a um Agente de Desenvolvimento baseado em modelos de nuvem para implementação.
+
+## Lições Aprendidas
+
+- IA da plataforma e IA de desenvolvimento possuem requisitos diferentes e devem evoluir independentemente.
+- Antes da adoção de uma nova tecnologia devem ser avaliados:
+  - documentação oficial;
+  - benchmarks independentes;
+  - experiências consolidadas da comunidade;
+  - compatibilidade com o hardware disponível.
+- Benchmarks próprios devem ser realizados apenas após essa análise inicial.
+- Economia de tokens isoladamente não justifica a adoção de uma solução que aumente significativamente o tempo de desenvolvimento.
 
 ---
 
@@ -169,7 +206,11 @@ Implantar a primeira versão funcional da camada de IA local.
 
 ## Sprint 4.2
 
-- Tool Calling.
+- atualização completa da plataforma para `qwen3:4b-instruct`;
+- validação do comportamento do novo modelo;
+- início da evolução para Tool Calling;
+- otimização do Provider Ollama;
+- manutenção do n8n desativado enquanto não fizer parte da sprint.
 
 ## Sprint 4.3
 

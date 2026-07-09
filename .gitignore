@@ -18,3 +18,4 @@ npm-debug.log*
 .api.pid
 .pnpm-store/
 .agents/
+.aider*

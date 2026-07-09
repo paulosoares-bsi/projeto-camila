@@ -1,0 +1,89 @@
+@host = http://localhost:11434
+
+### Health Check
+GET {{host}}
+
+###
+
+### Listar modelos instalados
+GET {{host}}/api/tags
+
+###
+
+### Listar modelos carregados em memória
+GET {{host}}/api/ps
+
+###
+
+### Gerar resposta (Generate)
+POST {{host}}/api/generate
+Content-Type: application/json
+
+{
+  "model": "qwen3:4b",
+  "prompt": "Responda apenas 'OK'.",
+  "stream": false
+}
+
+###
+
+### Chat
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{
+  "model": "qwen3:4b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Responda sempre em português."
+    },
+    {
+      "role": "user",
+      "content": "Quem é você?"
+    }
+  ],
+  "stream": false
+}
+
+###
+
+### Chat (Teste de Contexto)
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{
+  "model": "qwen3:4b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Você é um assistente especializado em atendimento via WhatsApp."
+    },
+    {
+      "role": "user",
+      "content": "Quais são suas responsabilidades?"
+    }
+  ],
+  "stream": false
+}
+
+###
+
+### Chat (Teste de JSON)
+POST {{host}}/api/chat
+Content-Type: application/json
+
+{
+  "model": "qwen3:4b",
+  "messages": [
+    {
+      "role": "system",
+      "content": "Responda exclusivamente em JSON válido."
+    },
+    {
+      "role": "user",
+      "content": "Retorne um objeto com status='ok' e versao='1.0'."
+    }
+  ],
+  "stream": false
+}

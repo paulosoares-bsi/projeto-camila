@@ -1,0 +1,107 @@
+O que a Camila precisa?
+- Um agente de IA que atende os clientes que chegam via Whatsapp
+- O agente se apresenta como se fosse a Camila, pergunta quem está falando, por que se interessou no curso, o que deseja
+- Apresenta o curso, manda vídeos, apresenta o preço
+- Se o atendimento se tornar complexo, fala algo para ganhar tempo e aciona a Camila real enquanto isso
+- O agente de ter uma linguagem clara, humana, demora alguns minutos para responder para não parecer tanto com automação, mas caso o cliente pergunte se ele é IA, ele deve se apresentar como agente de IA, não pode mentir
+- Recuperação de vendas
+- Quebra objeções de compra
+- Qualificar/segmentar o lead, após identificar a carreira de interesse do cliente por exemplo, oferecer produtos de acordo com esse interesse
+- Nutrir o lead com msg automáticas de atualização, com promoções, novidades e etc
+
+Qual é o negócio da Camila?
+- Ela é uma servidora publica que atua na área policial e também ajuda outras pessoas a alcançarem o sonho de ser aprovado em concursos policiais
+- Também é influencer de estilo de vida que valoriza o convívio familiar, base espiritual, riqueza afetiva, trabalho honrado e crescimento profissional e pessoal
+- Fornece cursos e mentorias especializadas na carreira policial, com guias de estudos, coaching e técnicas de estudo
+
+---
+
+ChatBot X Agente de IA
+ChatBot
+- Fluxos pré definidos
+- tarefas repetivas
+- baseados em regras e condições
+- agendar reuniões, responder dúvidas, pesquisa de satisfação/avaliação google
+- Botconversa, nicochat, devzap, manychat
+
+Agente de IA
+- Entende contexto, não segue roteiro, personaliza respostas
+- Usa IA generativa, LLMs
+- ChatGPT, Gemini, Claude
+- Pode aprender e se adaptar a partir de uma base de dados, planilhas, sites, histórico de conversa
+
+---
+
+Principais ferramentas
+Instagram
+- Manychat
+- Unichat
+- Uchat
+- Nicochat
+
+Whatsapp
+- Manychat*
+- Botconversa*
+- Unichat
+- Nicochat*
+- Z-API
+- Evolution API
+- Typebot
+
+E-mail
+- Active Campaign
+- Mautic
+- Mailchimp
+
+Ligação e SMS
+- Ligue Lead
+
+Agentes de IA
+- Zaia*
+- GPT Maker*
+- N8n/make+LLM+telegram/whatsapp
+
+Geren. de grupos de Whatsapp
+- Sendflow
+- Devzapp
+
+
+
+
+PERGUNTAS GERAIS SOBRE O NEGÓCIO:
+O que você realmente vende? Como você enxerga seus produtos?
+Quais são as principais dúvidas que os clientes têm (top 5)?
+Quais são as principais objeções (top 5)?
+Quais links de vídeos você já tem prontos para serem enviados?
+Me descreva como você espera que seja sua persona na IA, suas características marcantes (10 características)?
+Quais assuntos a IA não pode responder?
+Quando a IA deve te chamar? Quando estiver perto de fechar uma venda? Só quando tiver certeza que vai fechar? Só quando o cliente pedir 
+O que caracteriza um cliente quente para você?
+O que caracteriza uma venda perdida sem chance de recuperação?
+
+
+PRODUTOS VENDIDOS:
+Quais produtos você quer vender hoje?
+- produto1: R$ 1000
+- produto2: R$ 2000
+- produto3: R$ 1500
+- produto4: R$ 5000
+
+
+PARA CADA PRODUTO, RESPONDA:
+Qual o público de cada produto?
+Como funciona esse produto?
+Tem garantia?
+Quanto tempo dura?
+Qual plataforma é usada para ministrar o conteúdo?
+Tem acesso vitalício? Caso não, por quanto tempo?
+Tem parcelamento? Quantas parcelas e de quais formas de pagamento?
+Tem material incluso? Quais?
+
+
+
+Funil e Webhooks
+
+Produto "Guia Reta Final / Guia da Aprovação [concurso]" (low ticket)
+- Hotmart envia webhook do evento "compra completa", que ocorre após os 7 dias
+- WH vai para o n8n, no formulário 
