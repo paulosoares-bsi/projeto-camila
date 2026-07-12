@@ -1,74 +1,299 @@
-# Arquitetura
+# ARCHITECTURE
 
-A plataforma é multi-tenant, orientada a eventos e construída para desacoplar a lógica de negócio dos provedores externos.
+> Documento oficial da arquitetura do Projeto Camila.
+>
+> Este documento descreve como a plataforma é organizada e como seus componentes interagem.
+>
+> Princípios arquiteturais permanentes encontram-se em `ARCHITECTURE_PRINCIPLES.md`.
 
-O core deve permanecer reutilizável entre diferentes clientes (tenants), alterando apenas configurações, prompts, playbooks e bases de conhecimento.
+---
 
-## Componentes do Core
+# Objetivo
 
-- Event Processor
-- Rules Engine
-- State Machine
-- Playbook Runner
-- Prompt Builder
-- Providers
-- Auditoria
-- Persistência
+O Projeto Camila é uma plataforma **multi-tenant**, orientada a eventos e construída para desacoplar completamente a regra de negócio das integrações externas.
 
-## Contratos
+A arquitetura foi projetada para permitir evolução incremental, substituição de componentes e inclusão de novos provedores sem impacto na lógica do Core.
 
-Toda integração externa deve ocorrer através de contratos bem definidos.
+---
 
-- IA: `AIProvider`
-- WhatsApp: `WhatsAppProvider`
-- Webhooks: `WebhookVerifier`
-- Pagamentos: `PaymentProvider`
+# Visão Geral
 
-A lógica de negócio nunca deve depender diretamente de OpenAI, Ollama, Evolution API, Hotmart ou qualquer outro fornecedor.
+A plataforma é composta pelos seguintes componentes:
 
-## Fluxo
+```
+WhatsApp
+Hotmart
+Outras Integrações
 
-```text
-Webhook
+        │
+        ▼
+
+      API
+
+        │
+
+        ▼
+
+ Event Processor
+
+        │
+
+        ▼
+
+      Core
+
+ ├── Rules Engine
+ ├── PromptBuilder
+ ├── Playbook Runner
+ ├── Providers
+ └── Persistência
+
+        │
+
+        ▼
+
+    AI Provider
+
+        │
+
+        ▼
+
+ Modelo de IA
+
+        │
+
+        ▼
+
+ AI Provider
+
+        │
+
+        ▼
+
+ Event Processor
+
+        │
+
+        ▼
+
+ WhatsApp Provider
+```
+
+Toda a regra de negócio permanece concentrada no Core.
+
+---
+
+# Componentes
+
+## API
+
+Responsável por:
+
+- receber webhooks;
+- validar requisições;
+- transformar eventos externos em eventos internos.
+
+Não contém regra de negócio.
+
+---
+
+## Worker
+
+Responsável pelo processamento assíncrono dos eventos.
+
+---
+
+## Core
+
+É o núcleo da plataforma.
+
+Responsável por:
+
+- processamento de eventos;
+- regras de negócio;
+- gerenciamento de estados;
+- montagem de prompts;
+- execução de playbooks;
+- persistência;
+- integração entre componentes.
+
+Toda regra de negócio pertence ao Core.
+
+---
+
+## Banco de Dados
+
+Responsável pela persistência oficial da plataforma.
+
+Armazena:
+
+- Leads;
+- Mensagens;
+- Eventos;
+- Compras;
+- Assinaturas;
+- demais entidades de negócio.
+
+---
+
+## n8n
+
+Responsável apenas por orquestração.
+
+Não deve conter regras de negócio.
+
+---
+
+# Arquitetura da Camada de IA
+
+A camada de IA é composta pelos seguintes componentes.
+
+## EventProcessor
+
+Responsável por:
+
+- identificar o tenant;
+- recuperar contexto;
+- solicitar construção do prompt;
+- solicitar resposta ao AI Provider;
+- persistir mensagens e eventos;
+- futuramente coordenar Tool Calling.
+
+---
+
+## PromptBuilder
+
+Responsável por construir o contexto enviado ao modelo.
+
+Inclui:
+
+- informações do tenant;
+- histórico da conversa;
+- Knowledge Base;
+- Playbooks;
+- mensagem atual.
+
+Não executa regra de negócio.
+
+Não conhece o modelo utilizado.
+
+---
+
+## AI Provider
+
+Responsável por abstrair completamente a comunicação com o modelo de IA.
+
+Responsabilidades:
+
+- enviar prompts;
+- receber respostas;
+- normalizar formatos;
+- encapsular diferenças entre providers.
+
+A aplicação nunca conversa diretamente com um modelo.
+
+---
+
+## Modelo de IA
+
+Responsável apenas por interpretar o contexto recebido e produzir uma resposta.
+
+O modelo nunca deve:
+
+- acessar banco de dados;
+- executar regras de negócio;
+- conhecer componentes internos da aplicação.
+
+---
+
+# Fluxo da IA
+
+```
+Evento
 
 ↓
 
-Event Processor
+EventProcessor
 
 ↓
 
-Rules Engine
+PromptBuilder
 
 ↓
 
-Prompt Builder
+AI Provider
 
 ↓
 
-AIProvider
+Modelo
 
 ↓
 
-Modelo de IA
+AI Provider
 
 ↓
 
-AIProvider
+EventProcessor
 
 ↓
 
-Event Processor
+Persistência
 
 ↓
 
 WhatsApp Provider
 ```
 
-## Provedores de IA
+---
 
-O sistema deve permitir trocar o modelo de IA apenas por configuração.
+# Providers
 
-O restante da aplicação não deve sofrer alterações.
+Toda integração externa ocorre através de contratos.
+
+Contratos atualmente previstos:
+
+- AIProvider
+- WhatsAppProvider
+- PaymentProvider
+- WebhookVerifier
+
+A lógica de negócio nunca depende diretamente de:
+
+- Ollama;
+- OpenAI;
+- Anthropic;
+- Evolution API;
+- Hotmart;
+- qualquer outro fornecedor.
+
+---
+
+# Multi-tenancy
+
+Toda personalização permanece dentro do tenant.
+
+Cada tenant possui seus próprios:
+
+- prompts;
+- Knowledge Base;
+- playbooks;
+- regras;
+- produtos;
+- configurações.
+
+O Core permanece compartilhado.
+
+---
+
+# Configuração
+
+A troca de:
+
+- provider;
+- modelo;
+- serviços externos;
+
+deve ocorrer preferencialmente por configuração.
 
 Exemplo:
 
@@ -79,43 +304,35 @@ providers:
     model: qwen3:4b-instruct
 ```
 
-ou
+No futuro deverá ser possível utilizar outros providers sem alterações na regra de negócio.
 
-```yaml
-providers:
-  ai:
-    provider: openai
-    model: gpt-5.5
-```
+---
 
-ou
+# Evolução Prevista
 
-```yaml
-providers:
-  ai:
-    provider: anthropic
-    model: claude-sonnet-4
-```
+A arquitetura já está preparada para incorporar futuramente:
 
-## Desenvolvimento
+- Tool Calling;
+- RAG;
+- Embeddings;
+- Busca semântica;
+- Memória de longo prazo;
+- múltiplos providers de IA;
+- modelos hospedados em nuvem.
 
-Durante o desenvolvimento da plataforma será utilizado prioritariamente:
+Essas evoluções deverão ocorrer preservando a arquitetura existente.
 
-- Ollama
-- qwen3:4b-instruct
+---
 
-A utilização de modelos locais é exclusiva para desenvolvimento e testes da plataforma.
+# Princípios Arquiteturais
 
-O agente de desenvolvimento (Codex) continuará utilizando modelos da OpenAI.
+A arquitetura deve preservar permanentemente:
 
-Não faz parte da arquitetura utilizar modelos locais para desenvolvimento do código.
-
-## Princípios
-
-- Baixo acoplamento.
-- Alta coesão.
-- Componentes reutilizáveis.
-- Configuração acima de implementação.
-- Multi-tenant desde a arquitetura.
-- Fácil substituição de provedores.
-- Regras de negócio independentes do modelo de IA.
+- baixo acoplamento;
+- alta coesão;
+- separação de responsabilidades;
+- configuração acima de implementação;
+- componentes reutilizáveis;
+- evolução incremental;
+- independência entre regra de negócio e provedores externos;
+- compatibilidade entre tenants.

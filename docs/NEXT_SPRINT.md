@@ -12,9 +12,7 @@ Ao término da sprint ele deverá ser substituído pelo conteúdo da próxima sp
 
 # Objetivo
 
-Consolidar a utilização do Ollama na plataforma, atualizar o modelo oficial para `qwen3:4b-instruct` e preparar a arquitetura para a próxima evolução da camada de IA.
-
-Esta sprint também consolida o novo fluxo oficial de desenvolvimento entre ChatGPT e o Agente de Desenvolvimento.
+Consolidar a primeira versão funcional da camada de IA da plataforma utilizando Ollama e estabelecer um fluxo de desenvolvimento previsível, documentado e de baixo custo entre ChatGPT e o Agente de Desenvolvimento.
 
 ---
 
@@ -22,13 +20,12 @@ Esta sprint também consolida o novo fluxo oficial de desenvolvimento entre Chat
 
 Esta sprint contempla apenas:
 
-- atualizar toda a plataforma para utilizar `qwen3:4b-instruct`;
-- validar o comportamento do novo modelo;
-- revisar o OllamaProvider;
-- revisar prompts e parâmetros do modelo;
-- validar a compatibilidade da arquitetura existente;
-- manter a arquitetura preparada para futura implementação de Tool Calling;
-- revisar a documentação da camada de IA.
+- validar a integração da plataforma com o Ollama;
+- oficializar o modelo `qwen3:4b-instruct`;
+- revisar o fluxo de construção de prompts;
+- validar o fluxo completo da camada de IA;
+- consolidar a documentação técnica do projeto;
+- oficializar o novo fluxo de desenvolvimento.
 
 ---
 
@@ -36,51 +33,66 @@ Esta sprint contempla apenas:
 
 Ao final da sprint deverá ser possível:
 
-- enviar uma mensagem para o sistema;
-- montar corretamente o contexto da conversa;
-- construir o prompt;
+- receber uma mensagem da API;
+- persistir os dados necessários;
+- construir corretamente o contexto da conversa;
+- montar o prompt;
 - enviar o prompt ao Ollama;
-- utilizar oficialmente o modelo `qwen3:4b-instruct`;
-- receber respostas do novo modelo;
+- receber a resposta do modelo;
 - devolver a resposta ao fluxo existente;
-- manter a possibilidade de troca futura do modelo sem alterações na regra de negócio.
+- manter desacoplamento entre a regra de negócio e o modelo utilizado;
+- manter a documentação consistente com a implementação.
 
 ---
 
 # Restrições
 
-Não:
+Não faz parte desta sprint:
 
 - alterar componentes estáveis sem necessidade;
 - modificar a arquitetura existente;
 - criar overengineering;
-- criar dependência forte do modelo utilizado;
-- mover regras de negócio para o n8n;
-- utilizar modelos locais como agente de desenvolvimento.
+- implementar Tool Calling;
+- implementar RAG;
+- implementar Embeddings;
+- implementar Memória de Longo Prazo;
+- mover regras de negócio para o n8n.
 
-Priorizar:
+Priorizar sempre:
 
 - simplicidade;
-- baixo consumo de recursos;
+- estabilidade;
 - facilidade de manutenção;
-- desacoplamento;
-- estabilidade da arquitetura.
+- baixo acoplamento;
+- economia de recursos.
 
 ---
 
 # Fluxo Oficial da Sprint
 
-Toda implementação deverá seguir obrigatoriamente o fluxo abaixo:
+Toda atividade deverá seguir obrigatoriamente:
 
-1. ChatGPT realiza auditoria do projeto.
-2. ChatGPT pesquisa documentação oficial quando necessário.
-3. ChatGPT define arquitetura e estratégia.
-4. ChatGPT produz um prompt objetivo para o Agente de Desenvolvimento.
-5. Agente de Desenvolvimento implementa o escopo aprovado.
-6. Agente executa testes.
-7. Agente realiza operações de Git quando solicitado.
-8. ChatGPT realiza auditoria final.
-9. Documentação atualizada.
+1. Auditoria.
+2. Pesquisa (quando necessária).
+3. Arquitetura.
+4. Planejamento.
+5. Aprovação.
+6. Implementação.
+7. Testes.
+8. Git.
+9. Atualização da documentação.
+
+---
+
+# Forma de Trabalho
+
+Durante esta sprint:
+
+- ChatGPT é a principal ferramenta de desenvolvimento;
+- alterações pequenas deverão ser realizadas manualmente pelo desenvolvedor sempre que possível;
+- o Agente de Desenvolvimento será utilizado apenas quando houver ganho real de produtividade;
+- o código-fonte permanece como fonte da verdade;
+- o fluxo oficial encontra-se em `docs/DEVELOPMENT_WORKFLOW.md`.
 
 ---
 
@@ -88,29 +100,29 @@ Toda implementação deverá seguir obrigatoriamente o fluxo abaixo:
 
 Não faz parte desta sprint:
 
-- migração para IA em nuvem da plataforma;
+- migração para IA em nuvem;
 - Tool Calling;
 - memória de longo prazo;
 - RAG;
 - embeddings;
 - busca semântica;
 - otimizações prematuras;
-- substituição do agente de desenvolvimento.
+- alterações arquiteturais sem necessidade comprovada.
 
 ---
 
 # Entregáveis
 
-Ao concluir a sprint:
+Ao concluir a sprint deverão estar concluídos:
 
-- plataforma utilizando oficialmente `qwen3:4b-instruct`;
-- testes executados;
-- validação do novo modelo;
-- documentação atualizada;
-- PROJECT_STATE.md atualizado;
-- PROJECT_HISTORY.md atualizado;
-- decisões arquiteturais registradas;
-- lições aprendidas registradas.
+- integração funcional com o Ollama;
+- utilização oficial do modelo `qwen3:4b-instruct`;
+- validação do fluxo completo da IA;
+- documentação revisada;
+- criação do `DEVELOPMENT_WORKFLOW.md`;
+- atualização do `PROJECT_STATE.md`;
+- atualização do `PROJECT_HISTORY.md`;
+- atualização do prompt padrão de abertura de sprint.
 
 ---
 
@@ -118,22 +130,28 @@ Ao concluir a sprint:
 
 Durante esta sprint deverão ser observados os seguintes princípios:
 
-- arquitetura é definida antes da implementação;
-- decisões devem ser baseadas em documentação oficial e experiências consolidadas;
-- benchmarks próprios somente após análise técnica prévia;
-- evitar experimentos que apresentem baixa probabilidade de sucesso para o hardware disponível;
-- otimizar o trabalho do Agente de Desenvolvimento utilizando prompts objetivos e escopo reduzido.
+- arquitetura antes da implementação;
+- documentação antes de inferências;
+- uma alteração por vez;
+- validar cada alteração antes da próxima;
+- perguntar é melhor do que assumir;
+- utilizar o Agente de Desenvolvimento apenas quando houver benefício claro;
+- preservar a arquitetura existente.
 
 ---
 
 # Observações
 
-Sempre utilizar o código-fonte como fonte da verdade.
+Sempre considerar o código-fonte como fonte da verdade.
 
-Caso sejam identificadas divergências entre documentação e implementação, registrar antes de prosseguir.
+Caso exista divergência entre documentação e implementação, registrar a divergência antes de prosseguir.
 
-O n8n poderá permanecer desativado enquanto não fizer parte do escopo desta sprint.
+A IA utilizada pela plataforma e a IA utilizada durante o desenvolvimento possuem responsabilidades distintas.
 
-A IA utilizada pela plataforma e a IA utilizada durante o desenvolvimento possuem responsabilidades distintas e não devem ser confundidas.
+O fluxo operacional oficial encontra-se em:
 
-A arquitetura deverá permanecer preparada para futura substituição do modelo de IA sem impacto na lógica de negócio.
+```
+docs/DEVELOPMENT_WORKFLOW.md
+```
+
+A arquitetura deverá permanecer preparada para futura evolução da camada de IA sem impacto na lógica de negócio.

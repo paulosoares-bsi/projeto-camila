@@ -1,288 +1,132 @@
 # PROJECT_PHILOSOPHY
 
-> Este documento define a filosofia oficial de desenvolvimento do Projeto Camila.
+> Filosofia oficial de engenharia do Projeto Camila.
 >
-> Diferentemente do `PROJECT_STATE.md`, que descreve o estado atual do projeto, este documento contém princípios permanentes que devem orientar qualquer IA ou desenvolvedor que trabalhe no repositório.
+> Este documento define os princípios permanentes que orientam decisões técnicas, independentemente da tecnologia utilizada.
 
 ---
 
 # Objetivo
 
-Garantir que todas as decisões técnicas sejam consistentes ao longo da vida do projeto.
+Garantir que a evolução do Projeto Camila permaneça consistente ao longo do tempo.
 
-Este documento deve permanecer relativamente estável entre as sprints.
-
----
-
-# Filosofia Geral
-
-O Projeto Camila prioriza:
-
-- simplicidade;
-- baixo acoplamento;
-- alta coesão;
-- arquitetura evolutiva;
-- facilidade de manutenção;
-- estabilidade;
-- decisões baseadas em evidências.
-
-Evitar soluções complexas para problemas simples.
+Este documento não descreve arquitetura, implementação ou fluxo de desenvolvimento. Seu único objetivo é registrar os princípios que orientam as decisões do projeto.
 
 ---
 
-# Responsabilidades
+# Simplicidade
 
-## ChatGPT
+Sempre preferir a solução mais simples que atenda corretamente aos requisitos.
 
-Responsável por:
-
-- auditoria do projeto;
-- pesquisa técnica;
-- pesquisa de documentação oficial;
-- pesquisa de benchmarks;
-- pesquisa de experiências consolidadas da comunidade;
-- arquitetura;
-- planejamento das sprints;
-- revisão crítica das implementações;
-- identificação de riscos;
-- atualização da documentação.
-
-O ChatGPT deve atuar como arquiteto técnico do projeto.
-
----
-
-## Agente de Desenvolvimento
-
-Responsável por:
-
-- implementar alterações;
-- executar refatorações delimitadas;
-- corrigir bugs;
-- executar testes;
-- realizar operações de Git quando solicitado.
-
-O agente não deve alterar arquitetura nem tomar decisões de negócio por iniciativa própria.
-
----
-
-# Fluxo Oficial
-
-Toda sprint deverá seguir o fluxo abaixo.
-
-```
-Auditoria
-
-↓
-
-Arquitetura
-
-↓
-
-Pesquisa
-
-↓
-
-Planejamento
-
-↓
-
-Prompt
-
-↓
-
-Agente de Desenvolvimento
-
-↓
-
-Implementação
-
-↓
-
-Testes
-
-↓
-
-Git
-
-↓
-
-Auditoria Final
-
-↓
-
-Documentação
-```
-
-Não inverter esta ordem.
-
----
-
-# Processo de Tomada de Decisão
-
-Antes de adotar qualquer tecnologia nova, seguir obrigatoriamente esta sequência:
-
-1. Documentação oficial.
-2. Benchmarks independentes.
-3. Experiências consolidadas da comunidade.
-4. Compatibilidade com o hardware disponível.
-5. Benchmark próprio.
-6. Decisão arquitetural.
-
-Evitar experimentação quando houver forte evidência de baixa probabilidade de sucesso.
-
----
-
-# Critérios para Recomendações
-
-As sugestões devem ser:
-
-- conservadoras;
-- fundamentadas;
-- reproduzíveis;
-- compatíveis com a realidade do projeto.
-
-Evitar recomendações apenas porque são tecnologias recentes ou populares.
-
-Sempre que possível citar limitações conhecidas.
-
----
-
-# Filosofia de Arquitetura
-
-A arquitetura deve permitir:
-
-- troca de providers;
-- troca de modelos de IA;
-- evolução incremental;
-- baixo impacto entre componentes.
-
-Toda regra de negócio pertence ao Core.
-
-Toda integração externa deve ocorrer através de Providers.
-
----
-
-# Filosofia de IA
-
-Existem duas inteligências distintas.
-
-## IA da Plataforma
-
-Responsável pelo atendimento ao cliente.
-
-Atualmente:
-
-- Ollama;
-- qwen3:4b-instruct.
-
-Esta IA deve ser substituível futuramente sem alterar a lógica de negócio.
-
----
-
-## IA de Desenvolvimento
-
-Responsável pela implementação do software.
-
-Nesta fase do projeto utiliza:
-
-- ChatGPT para arquitetura e auditoria;
-- Agente de Desenvolvimento para implementação.
-
-Modelos locais não são utilizados como agente principal de desenvolvimento nesta fase.
-
----
-
-# Economia de Recursos
-
-O projeto deve minimizar:
-
-- consumo de tokens;
-- consumo de CPU;
-- consumo de RAM;
-- tempo de execução;
-- número de chamadas ao modelo;
-- contexto enviado aos modelos.
-
-Economia de recursos deve ser considerada juntamente com produtividade.
-
-Uma solução mais barata que aumente significativamente o tempo de desenvolvimento não deve ser adotada.
-
----
-
-# Filosofia de Implementação
-
-Implementar apenas o necessário para a sprint.
+Complexidade somente deve ser introduzida quando existir benefício comprovado.
 
 Evitar:
 
 - overengineering;
 - abstrações prematuras;
-- otimizações prematuras;
-- funcionalidades sem demanda.
+- otimizações prematuras.
 
 ---
 
-# Filosofia de Documentação
+# Evolução Incremental
 
-A documentação deve refletir apenas decisões consolidadas.
+A plataforma deve evoluir em pequenos incrementos.
 
-Evitar registrar hipóteses ou experimentos que não façam parte da arquitetura oficial.
-
-Cada documento deve possuir responsabilidade clara.
-
-Evitar duplicação de conteúdo.
+Cada alteração deve entregar valor, preservar estabilidade e facilitar a próxima evolução.
 
 ---
 
-# Filosofia de Git
+# Evidências antes de Opiniões
 
-Uma sprint somente é considerada concluída quando:
+Decisões técnicas devem ser baseadas em evidências.
 
-- implementação concluída;
-- testes executados;
-- documentação atualizada;
-- alterações versionadas.
+Sempre que necessário considerar:
 
----
+- documentação oficial;
+- experiências consolidadas da comunidade;
+- limitações conhecidas;
+- custo de manutenção;
+- compatibilidade com a arquitetura existente.
 
-# Lições Permanentes
-
-As seguintes lições passam a fazer parte da cultura do projeto.
-
-## Benchmark antes da implementação
-
-Antes de investir tempo significativo em uma tecnologia, validar sua viabilidade através de documentação, benchmarks e experiências da comunidade.
+Evitar decisões baseadas apenas em tendências.
 
 ---
 
-## Arquitetura antes do código
+# Arquitetura antes da Implementação
 
 Toda implementação deve partir de uma arquitetura previamente definida.
 
----
-
-## Simplicidade
-
-A solução mais simples que atenda corretamente ao requisito deve ser preferida.
+O código deve materializar uma decisão arquitetural, nunca substituí-la.
 
 ---
 
-## Separação de responsabilidades
+# Separação de Responsabilidades
 
-A IA da plataforma e a IA utilizada durante o desenvolvimento possuem objetivos diferentes e devem evoluir de forma independente.
+Cada componente deve possuir uma responsabilidade clara.
+
+A divisão de responsabilidades deve favorecer:
+
+- baixo acoplamento;
+- alta coesão;
+- facilidade de manutenção;
+- reutilização.
 
 ---
 
-## Código como fonte da verdade
+# Configuração acima de Implementação
 
-Sempre que existir divergência entre documentação e implementação, o código deve ser analisado primeiro.
+Sempre que possível, mudanças de comportamento devem ocorrer por configuração e não por alteração de código.
 
-A documentação deverá ser atualizada quando necessário.
+Isso reduz manutenção e facilita reutilização entre tenants.
 
 ---
 
-# Revisão
+# Documentação como Parte do Software
 
-Este documento deve sofrer poucas alterações ao longo do projeto.
+A documentação faz parte do projeto.
 
-Novos princípios somente deverão ser adicionados quando representarem decisões permanentes da arquitetura ou da forma de desenvolvimento.
+Ela deve:
+
+- refletir apenas decisões consolidadas;
+- permanecer consistente com o código;
+- evitar duplicações;
+- possuir responsabilidade clara.
+
+Sempre que possível, cada informação deve possuir um único documento responsável.
+
+---
+
+# Código como Fonte da Verdade
+
+Quando existir divergência entre documentação e implementação, o código deve ser analisado primeiro.
+
+A documentação deverá ser atualizada para refletir a implementação aprovada.
+
+---
+
+# Conservadorismo Técnico
+
+Preferir tecnologias maduras, bem documentadas e amplamente utilizadas.
+
+Novas tecnologias somente devem ser adotadas quando apresentarem benefício claro para o projeto.
+
+---
+
+# Sustentabilidade
+
+Toda decisão deve considerar o custo de evolução futura.
+
+Priorizar soluções que reduzam:
+
+- complexidade;
+- acoplamento;
+- retrabalho;
+- custo de manutenção.
+
+---
+
+# Melhoria Contínua
+
+Os princípios deste documento devem permanecer estáveis.
+
+Novos princípios somente deverão ser adicionados quando representarem uma mudança permanente na forma de construir e evoluir o Projeto Camila.
