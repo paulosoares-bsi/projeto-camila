@@ -10,10 +10,10 @@ automation:
 
 providers:
   ai:
-    provider: ollama
-    model: qwen3:4b
-    baseUrl: ${OLLAMA_BASE_URL}
-    apiKey: ${OPENAI_API_KEY}
+    provider: openrouter
+    model: openrouter/free
+    apiKey: ${OPENROUTER_API_KEY}
+    baseUrl: https://openrouter.ai/api/v1
 
   whatsapp:
     provider: mock

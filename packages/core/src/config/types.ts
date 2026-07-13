@@ -5,7 +5,8 @@ export type ProviderName =
   | "evolution"
   | "n8n"
   | "hotmart"
-  | "mock";
+  | "mock"
+  | "openrouter";
 
 export interface PlatformConfig {
   environment: string;
@@ -19,7 +20,7 @@ export interface PlatformConfig {
   };
   providers: {
     ai: {
-      provider: Extract<ProviderName, "openai" | "anthropic" | "ollama" | "mock">;
+      provider: Extract<ProviderName, "openai" | "anthropic" | "ollama" | "mock" | "openrouter">;
       model: string;
       apiKey?: string;
       baseUrl?: string;

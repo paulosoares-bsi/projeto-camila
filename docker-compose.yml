@@ -15,21 +15,23 @@ services:
       timeout: 5s
       retries: 10
 
-  n8n:
-    image: n8nio/n8n:latest
-    environment:
-      N8N_HOST: n8n
-      N8N_PORT: 5678
-      N8N_PROTOCOL: http
-      WEBHOOK_URL: http://n8n:5678/
-      GENERIC_TIMEZONE: America/Sao_Paulo
-    ports:
-      - "5678:5678"
-    volumes:
-      - n8n_data:/home/node/.n8n
-    depends_on:
-      postgres:
-        condition: service_healthy
+  # n8n service disabled for now (not required for the OpenRouter migration).
+  # Re-enable when workflow orchestration is needed.
+  # n8n:
+  #   image: n8nio/n8n:latest
+  #   environment:
+  #     N8N_HOST: n8n
+  #     N8N_PORT: 5678
+  #     N8N_PROTOCOL: http
+  #     WEBHOOK_URL: http://n8n:5678/
+  #     GENERIC_TIMEZONE: America/Sao_Paulo
+  #   ports:
+  #     - "5678:5678"
+  #   volumes:
+  #     - n8n_data:/home/node/.n8n
+  #   depends_on:
+  #     postgres:
+  #       condition: service_healthy
 
   api:
     build: .
@@ -51,8 +53,6 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-      n8n:
-        condition: service_started
 
   worker:
     build: .

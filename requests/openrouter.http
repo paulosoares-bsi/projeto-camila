@@ -1,0 +1,43 @@
+### Cenário 1 - valida processamento real pela IA (conta e identifica modelo)
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5511999990001",
+  "messageId": "openrouter-smoke-001",
+  "text": "Onde recebo o link para a mentoria?",
+  "channel": "whatsapp"
+}
+
+### Cenário 2 - dúvida comercial (valor da mentoria)
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5511999990002",
+  "messageId": "openrouter-smoke-002",
+  "text": "Oi, qual o valor da mentoria?",
+  "channel": "whatsapp"
+}
+
+### Cenário 3 - dúvida sobre o curso
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5511999990003",
+  "messageId": "openrouter-smoke-003",
+  "text": "Você consegue me ajudar com dúvidas sobre o curso?",
+  "channel": "whatsapp"
+}
+
+### Cenário 4 - saudação simples
+POST http://localhost:3333/webhooks/camila-quindere/message
+Content-Type: application/json
+
+{
+  "externalContactId": "5511999990004",
+  "messageId": "openrouter-smoke-004",
+  "text": "Bom dia!",
+  "channel": "whatsapp"
+}
