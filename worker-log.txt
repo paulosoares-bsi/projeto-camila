@@ -1,3 +1,0 @@
-$ tsx apps/api/src/worker.ts
-Worker listening for received events.
-^C[ELIFECYCLE] Command failed with exit code 3221225786.
