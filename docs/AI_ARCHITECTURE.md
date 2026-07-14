@@ -145,13 +145,13 @@ Durante a fase atual do projeto:
 
 Runtime:
 
-**Ollama**
+**OpenRouter**
 
 Modelo:
 
-**qwen3:4b-instruct**
+**openrouter/free**
 
-A arquitetura permanece preparada para futura migração para modelos hospedados em nuvem.
+A arquitetura permanece preparada para futura migração para outros modelos hospedados em nuvem ou locais.
 
 ---
 

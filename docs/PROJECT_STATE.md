@@ -121,13 +121,13 @@ A plataforma deverá ser capaz de:
 
 Runtime oficial:
 
-Ollama
+OpenRouter
 
 Modelo oficial:
 
-**qwen3:4b-instruct**
+**openrouter/free**
 
-A arquitetura deve permanecer preparada para futura migração para outros modelos locais sem alterar a lógica de negócio.
+A arquitetura deve permanecer preparada para futura migração para outros modelos locais ou em nuvem sem alterar a lógica de negócio.
 
 ---
 
@@ -308,7 +308,7 @@ Associar um mesmo Lead aos diversos canais:
 
 ## IA da Plataforma
 
-A IA da plataforma permanece exclusivamente local utilizando Ollama.
+A IA da plataforma utiliza prioritariamente OpenRouter (modelo `openrouter/free`).
 
 ---
 

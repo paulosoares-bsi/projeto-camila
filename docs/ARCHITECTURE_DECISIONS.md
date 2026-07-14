@@ -61,11 +61,11 @@ Responsável pelo atendimento dos clientes.
 
 Runtime oficial:
 
-- Ollama
+- OpenRouter
 
 Modelo oficial:
 
-- qwen3:4b-instruct
+- openrouter/free
 
 ---
 
