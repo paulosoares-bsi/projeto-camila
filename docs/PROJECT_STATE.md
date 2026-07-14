@@ -258,10 +258,15 @@ Implementado:
 - Contexto de Conversa;
 - MockAIProvider;
 - OllamaProvider;
+- OpenRouterProvider;
 - Evolution Provider;
 - Hotmart Provider (estrutura);
 - Knowledge Base;
-- Playbooks.
+- Playbooks;
+- SourceAdapter (normalização multi-fonte);
+- HotmartWebhookHandler;
+- Tool Calling (ToolRegistry + 6 ferramentas);
+- Migrations 003 (lead_interests, lead_escalations).
 
 ---
 

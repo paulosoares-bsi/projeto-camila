@@ -157,11 +157,18 @@ A arquitetura permanece preparada para futura migração para outros modelos hos
 
 # Tool Calling
 
-Ainda não implementado.
+Implementado na Sprint 6.
 
-A arquitetura já está preparada para evolução futura.
+Ferramentas disponíveis:
 
-Fluxo previsto:
+- `buscar_lead` – consulta dados do lead.
+- `atualizar_lead` – atualiza estado do lead.
+- `registrar_interesse` – registra interesse em produto/mentoria.
+- `escalar_humano` – escalona para atendimento humano.
+- `consultar_produto` – consulta catálogo de produtos.
+- `consultar_knowledge_base` – consulta a base de conhecimento.
+
+Fluxo oficial:
 
 ```
 Modelo
@@ -172,7 +179,11 @@ Tool Calling
 
 ↓
 
-Core
+ToolRegistry (Core)
+
+↓
+
+Tool.execute()
 
 ↓
 
@@ -186,6 +197,8 @@ Modelo
 
 Resposta Final
 ```
+
+O loop de Tool Calling é limitado a 5 iterações por mensagem.
 
 ---
 

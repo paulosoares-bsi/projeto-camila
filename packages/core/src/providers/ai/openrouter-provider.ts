@@ -20,18 +20,48 @@ export class OpenRouterProvider implements AIProvider {
   }
 
   async generateResponse(input: GenerateResponseInput): Promise<GenerateResponseOutput> {
+    const messages: OpenAI.Chat.Completions.ChatCompletionMessageParam[] = [
+      { role: "system", content: input.systemPrompt },
+      { role: "user", content: `${input.context}\n\nMensagem da lead:\n${input.userMessage}` },
+    ];
+
+    if (input.toolResults?.length) {
+      for (const tr of input.toolResults) {
+        messages.push({
+          role: "tool",
+          tool_call_id: tr.toolCallId,
+          content: JSON.stringify(tr.output),
+        });
+      }
+    }
+
+    const tools = input.tools?.map((t) => ({
+      type: "function" as const,
+      function: {
+        name: t.name,
+        description: t.description,
+        parameters: t.parameters,
+      },
+    }));
+
     const response = await this.client.chat.completions.create({
       model: this.model,
-      messages: [
-        { role: "system", content: input.systemPrompt },
-        { role: "user", content: `${input.context}\n\nMensagem da lead:\n${input.userMessage}` },
-      ],
+      messages,
+      ...(tools?.length ? { tools, tool_choice: "auto" as const } : {}),
     });
 
+    const message = response.choices[0]?.message;
+    const toolCalls = message?.tool_calls?.map((tc) => ({
+      id: tc.id,
+      name: tc.function.name,
+      arguments: JSON.parse(tc.function.arguments || "{}"),
+    }));
+
     return {
-      text: response.choices[0]?.message?.content ?? "",
+      text: message?.content ?? "",
       model: this.model,
       provider: "openrouter",
+      toolCalls: toolCalls?.length ? toolCalls : undefined,
     };
   }
 }

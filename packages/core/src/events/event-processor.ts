@@ -9,6 +9,9 @@ import type { EventStore } from "../database/event-store.js";
 import type { HotmartRepository } from "../database/hotmart-repository.js";
 import type { LeadRepository } from "../database/lead-repository.js";
 import type { MessageRepository } from "../database/message-repository.js";
+import { ToolRegistry } from "../tools/tool.js";
+import { registerLeadTools } from "../tools/lead-tools.js";
+import { registerKnowledgeTools } from "../tools/knowledge-tools.js";
 
 export interface EventProcessorDependencies {
   rootDir: string;
@@ -19,12 +22,22 @@ export interface EventProcessorDependencies {
   hotmartRepository?: HotmartRepository;
   leadRepository?: LeadRepository;
   messageRepository?: MessageRepository;
+  toolRegistry?: ToolRegistry;
 }
 
 export class EventProcessor {
   constructor(private readonly deps: EventProcessorDependencies) {}
 
   private readonly promptBuilder = new PromptBuilder();
+
+  private buildToolRegistry(tenantId: string, tenant: ReturnType<typeof loadTenantContext>): ToolRegistry {
+    const registry = this.deps.toolRegistry ?? new ToolRegistry();
+    if (this.deps.leadRepository) {
+      registerLeadTools(registry, this.deps.leadRepository);
+    }
+    registerKnowledgeTools(registry, this.deps.rootDir, tenantId, tenant);
+    return registry;
+  }
 
   async process(event: PlatformEvent): Promise<void> {
     const tenant = loadTenantContext(this.deps.rootDir, event.tenantId);
@@ -81,13 +94,47 @@ export class EventProcessor {
       currentMessage: payload.text,
     });
 
-    const aiResponse = await this.deps.aiProvider.generateResponse({
+    const toolRegistry = this.buildToolRegistry(event.tenantId, tenant);
+    const tools = toolRegistry.list().map((t) => ({
+      name: t.name,
+      description: t.description,
+      parameters: t.parameters,
+    }));
+
+    const toolCtx = {
+      tenantId: event.tenantId,
+      leadId,
+      externalContactId: payload.externalContactId,
+    };
+
+    let aiResponse = await this.deps.aiProvider.generateResponse({
       tenantId: event.tenantId,
       prompt,
       systemPrompt: tenant.systemPrompt,
       context: prompt,
       userMessage: payload.text,
+      tools,
     });
+
+    // Loop de Tool Calling: executa ferramentas e obtém resposta final
+    let iterations = 0;
+    while (aiResponse.toolCalls?.length && iterations < 5) {
+      iterations++;
+      const toolResults: { toolCallId: string; output: unknown }[] = [];
+      for (const call of aiResponse.toolCalls) {
+        const result = await toolRegistry.execute(call.name, call.arguments, toolCtx);
+        toolResults.push({ toolCallId: call.id, output: result });
+      }
+      aiResponse = await this.deps.aiProvider.generateResponse({
+        tenantId: event.tenantId,
+        prompt,
+        systemPrompt: tenant.systemPrompt,
+        context: prompt,
+        userMessage: payload.text,
+        tools,
+        toolResults,
+      });
+    }
 
     const instance =
       tenant.config.providers?.whatsapp?.instance ??
