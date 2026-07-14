@@ -15,6 +15,8 @@ import { registerLeadTools } from "../tools/lead-tools.js";
 import { registerKnowledgeTools } from "../tools/knowledge-tools.js";
 import { RagStore } from "../rag/rag.js";
 import { LocalEmbeddingProvider } from "../rag/local-embedding.js";
+import { Logger } from "../observability/logger.js";
+import { Metrics } from "../observability/metrics.js";
 
 export interface EventProcessorDependencies {
   rootDir: string;
@@ -28,6 +30,8 @@ export interface EventProcessorDependencies {
   memoryRepository?: MemoryRepository;
   toolRegistry?: ToolRegistry;
   ragStore?: RagStore;
+  logger?: Logger;
+  metrics?: Metrics;
 }
 
 export class EventProcessor {
@@ -134,14 +138,19 @@ export class EventProcessor {
       externalContactId: payload.externalContactId,
     };
 
-    let aiResponse = await this.deps.aiProvider.generateResponse({
-      tenantId: event.tenantId,
-      prompt: enrichedContext,
-      systemPrompt: tenant.systemPrompt,
-      context: enrichedContext,
-      userMessage: payload.text,
-      tools,
-    });
+    const logger = this.deps.logger ?? new Logger("event-processor");
+    const metrics = this.deps.metrics ?? new Metrics();
+
+    let aiResponse = await metrics.measure("ai.generate", () =>
+      this.deps.aiProvider.generateResponse({
+        tenantId: event.tenantId,
+        prompt: enrichedContext,
+        systemPrompt: tenant.systemPrompt,
+        context: enrichedContext,
+        userMessage: payload.text,
+        tools,
+      }),
+    );
 
     // Loop de Tool Calling: executa ferramentas e obtém resposta final
     let iterations = 0;
@@ -149,19 +158,25 @@ export class EventProcessor {
       iterations++;
       const toolResults: { toolCallId: string; output: unknown }[] = [];
       for (const call of aiResponse.toolCalls) {
+        metrics.increment(`tool.${call.name}`);
+        logger.info("tool_call", { tool: call.name, args: call.arguments });
         const result = await toolRegistry.execute(call.name, call.arguments, toolCtx);
         toolResults.push({ toolCallId: call.id, output: result });
       }
-      aiResponse = await this.deps.aiProvider.generateResponse({
-        tenantId: event.tenantId,
-        prompt: enrichedContext,
-        systemPrompt: tenant.systemPrompt,
-        context: enrichedContext,
-        userMessage: payload.text,
-        tools,
-        toolResults,
-      });
+      aiResponse = await metrics.measure("ai.generate", () =>
+        this.deps.aiProvider.generateResponse({
+          tenantId: event.tenantId,
+          prompt: enrichedContext,
+          systemPrompt: tenant.systemPrompt,
+          context: enrichedContext,
+          userMessage: payload.text,
+          tools,
+          toolResults,
+        }),
+      );
     }
+    metrics.increment("events.processed");
+    logger.info("message_processed", { tenantId: event.tenantId, leadId, iterations });
 
     const instance =
       tenant.config.providers?.whatsapp?.instance ??

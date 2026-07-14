@@ -269,7 +269,8 @@ Implementado:
 - Migrations 003 (lead_interests, lead_escalations);
 - RAG (RagStore + LocalEmbeddingProvider);
 - Memória de longo prazo (MemoryRepository + migration 004);
-- Integração RAG + Memória no EventProcessor.
+- Integração RAG + Memória no EventProcessor;
+- Observabilidade (Logger + Metrics) integrada no EventProcessor.
 
 ---
 
@@ -361,52 +362,6 @@ O histórico deverá evoluir para conter:
 - canal;
 - eventos do sistema;
 - marcadores temporais.
-
----
-
-# Observação Arquitetural
-
-Existem atualmente duas pastas semelhantes:
-
-packages/core/src/prompt
-
-↓
-
-Código do PromptBuilder.
-
-packages/core/src/prompts
-
-↓
-
-System prompts dos tenants.
-
-Isso é intencional.
-
-Essas pastas NÃO devem ser removidas nem unificadas.
-
-Existe uma refatoração planejada para uma sprint futura.
-
----
-
-# Refatorações Planejadas
-
-Renomear apenas nomenclatura.
-
-packages/core/src/prompt
-
-↓
-
-packages/core/src/prompt-builder
-
-packages/core/src/prompts
-
-↓
-
-packages/core/src/system-prompts
-
-Essa alteração deverá modificar apenas diretórios e imports.
-
-Não deverá alterar comportamento.
 
 ---
 
