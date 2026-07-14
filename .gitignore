@@ -19,5 +19,5 @@ npm-debug.log*
 .pnpm-store/
 .agents/
 .aider*
-"smoke-output.txt"  
-"worker-log.txt"  
+smoke-output.txt
+worker-log.txt
