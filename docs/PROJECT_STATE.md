@@ -266,7 +266,10 @@ Implementado:
 - SourceAdapter (normalização multi-fonte);
 - HotmartWebhookHandler;
 - Tool Calling (ToolRegistry + 6 ferramentas);
-- Migrations 003 (lead_interests, lead_escalations).
+- Migrations 003 (lead_interests, lead_escalations);
+- RAG (RagStore + LocalEmbeddingProvider);
+- Memória de longo prazo (MemoryRepository + migration 004);
+- Integração RAG + Memória no EventProcessor.
 
 ---
 

@@ -9,9 +9,12 @@ import type { EventStore } from "../database/event-store.js";
 import type { HotmartRepository } from "../database/hotmart-repository.js";
 import type { LeadRepository } from "../database/lead-repository.js";
 import type { MessageRepository } from "../database/message-repository.js";
+import type { MemoryRepository } from "../database/memory-repository.js";
 import { ToolRegistry } from "../tools/tool.js";
 import { registerLeadTools } from "../tools/lead-tools.js";
 import { registerKnowledgeTools } from "../tools/knowledge-tools.js";
+import { RagStore } from "../rag/rag.js";
+import { LocalEmbeddingProvider } from "../rag/local-embedding.js";
 
 export interface EventProcessorDependencies {
   rootDir: string;
@@ -22,7 +25,9 @@ export interface EventProcessorDependencies {
   hotmartRepository?: HotmartRepository;
   leadRepository?: LeadRepository;
   messageRepository?: MessageRepository;
+  memoryRepository?: MemoryRepository;
   toolRegistry?: ToolRegistry;
+  ragStore?: RagStore;
 }
 
 export class EventProcessor {
@@ -94,6 +99,28 @@ export class EventProcessor {
       currentMessage: payload.text,
     });
 
+    // RAG: recupera trechos relevantes da base de conhecimento
+    let ragContext = "";
+    if (this.deps.ragStore) {
+      const results = await this.deps.ragStore.retrieve(payload.text, 3);
+      ragContext = results.map((r) => r.chunk.text).join("\n---\n");
+    }
+
+    // Memória de longo prazo do lead
+    let memoryContext = "";
+    if (leadId && this.deps.memoryRepository) {
+      const memories = await this.deps.memoryRepository.listRecent({
+        tenantId: event.tenantId,
+        leadId,
+        limit: 5,
+      });
+      memoryContext = memories.map((m) => `- ${m.content}`).join("\n");
+    }
+
+    const enrichedContext = [prompt, ragContext && `Contexto RAG:\n${ragContext}`, memoryContext && `Memória:\n${memoryContext}`]
+      .filter(Boolean)
+      .join("\n\n");
+
     const toolRegistry = this.buildToolRegistry(event.tenantId, tenant);
     const tools = toolRegistry.list().map((t) => ({
       name: t.name,
@@ -109,9 +136,9 @@ export class EventProcessor {
 
     let aiResponse = await this.deps.aiProvider.generateResponse({
       tenantId: event.tenantId,
-      prompt,
+      prompt: enrichedContext,
       systemPrompt: tenant.systemPrompt,
-      context: prompt,
+      context: enrichedContext,
       userMessage: payload.text,
       tools,
     });
@@ -127,9 +154,9 @@ export class EventProcessor {
       }
       aiResponse = await this.deps.aiProvider.generateResponse({
         tenantId: event.tenantId,
-        prompt,
+        prompt: enrichedContext,
         systemPrompt: tenant.systemPrompt,
-        context: prompt,
+        context: enrichedContext,
         userMessage: payload.text,
         tools,
         toolResults,

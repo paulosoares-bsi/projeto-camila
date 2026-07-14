@@ -206,10 +206,7 @@ O loop de Tool Calling é limitado a 5 iterações por mensagem.
 
 Não fazem parte da arquitetura implementada:
 
-- RAG;
-- Embeddings;
 - Streaming;
-- Memória de longo prazo;
 - múltiplos modelos simultaneamente;
 - agentes especializados;
 - planejamento automático.
@@ -218,18 +215,27 @@ Esses recursos deverão ser adicionados sem necessidade de alterações estrutur
 
 ---
 
+# RAG e Memória
+
+Implementado na Sprint 7.
+
+- `RagStore` – indexação e recuperação por similaridade de cosseno.
+- `LocalEmbeddingProvider` – embeddings determinísticos locais (dev/teste).
+- `MemoryRepository` – memória de longo prazo por lead (`lead_memories`).
+- Integração no EventProcessor: contexto RAG + memória enriquecem o prompt.
+
+Produção deve substituir `LocalEmbeddingProvider` por um provider de embeddings real (OpenAI/OpenRouter).
+
+---
+
 # Evoluções Futuras
 
 Planejadas:
 
-- Tool Calling;
-- RAG;
-- Embeddings;
-- Busca semântica;
-- Cache de contexto;
-- Memória de longo prazo;
+- Streaming;
 - Suporte a múltiplos providers;
-- IA hospedada em nuvem.
+- IA hospedada em nuvem;
+- Embeddings em produção.
 
 ---
 
