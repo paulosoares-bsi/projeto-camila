@@ -2,7 +2,7 @@
 
 > Documento oficial do estado atual do Projeto Camila.
 >
-> Última atualização: 2026-07-09
+> Última atualização: 2026-07-14
 >
 > Este documento deve ser considerado a referência oficial do projeto.
 
@@ -270,7 +270,8 @@ Implementado:
 - RAG (RagStore + LocalEmbeddingProvider);
 - Memória de longo prazo (MemoryRepository + migration 004);
 - Integração RAG + Memória no EventProcessor;
-- Observabilidade (Logger + Metrics) integrada no EventProcessor.
+- Observabilidade (Logger + Metrics) integrada no EventProcessor;
+- Multi-channel (ChannelAdapter + TelegramChannelAdapter).
 
 ---
 

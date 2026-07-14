@@ -1,0 +1,57 @@
+$ tsx --env-file=.env scripts/smoke-message.mjs ";" "echo" "EXIT=0"
+=== INFRAESTRUTURA ===
+Postgres: OK
+API: OK (aiProvider=openrouter)
+Infraestrutura OK
+
+=== ATORES ===
+tenant=camila-quindere | provider=openrouter | modelo=openrouter/free | canal=whatsapp(mock)
+
+--- Cenário (lead 5511999990001) ---
+ENTRADA
+{
+  "externalContactId": "5511999990001",
+  "messageId": "openrouter-smoke-001",
+  "text": "Onde recebo o link para a mentoria?",
+  "channel": "whatsapp"
+}
+[mock-whatsapp] {
+  tenantId: 'camila-quindere',
+  instance: 'camila',
+  to: '5511999990001',
+  text: 'Olá! 💛\n' +
+    '\n' +
+    'Para manter nossa transparência: sou o agente de IA da empresa Camila Quindere, treinado para acolher e orientar com clareza e honestidade — mas não sou a Camila pessoalmente.\n' +
+    '\n' +
+    'Sobre sua pergunta — **"Onde recebo o link para a mentoria?"** — compreendo a relevância desse acesso para você e que tenha retornado a perguntar. \n' +
+    '\n' +
+    'Como seu estado segue como **lead novo** e o fluxo de envio desse link específico não está documentado na base de conhecimento que utilizo como fonte de verdade, trata-se de uma dúvida não mapeada nas minhas diretrizes operacionais. Minha regra fundamental é nunca responder fora da documentação da empresa ou com base em suposições.\n' +
+    '\n' +
+    'Por isso, mantenho sua solicitação **escalada para um humano da nossa equipe** (processo já iniciado nas interações anteriores). Ele(a) retornará com a informação exata de onde e como você recebe o link, respeitando o processo comercial vigente e garantindo a precisão que você merece.\n' +
+    '\n' +
+    'Sua demanda está registrada e acompanhada com atenção. Em breve alguém da Camila Quindere falará com você! ✨\n' +
+    '\n' +
+    'Enquanto aguarda o retorno do time especializado, fico à disposição por aqui para quaisquer outras dúvidas gerais sobre como trabalhamos.'
+}
+
+SAÍDA: 
+Olá! 💛
+
+Para manter nossa transparência: sou o agente de IA da empresa Camila Quindere, treinado para acolher e orientar com clareza e honestidade — mas não sou a Camila pessoalmente.
+
+Sobre sua pergunta — **"Onde recebo o link para a mentoria?"** — compreendo a relevância desse acesso para você e que tenha retornado a perguntar. 
+
+Como seu estado segue como **lead novo** e o fluxo de envio desse link específico não está documentado na base de conhecimento que utilizo como fonte de verdade, trata-se de uma dúvida não mapeada nas minhas diretrizes operacionais. Minha regra fundamental é nunca responder fora da documentação da empresa ou com base em suposições.
+
+Por isso, mantenho sua solicitação **escalada para um humano da nossa equipe** (processo já iniciado nas interações anteriores). Ele(a) retornará com a informação exata de onde e como você recebe o link, respeitando o processo comercial vigente e garantindo a precisão que você merece.
+
+Sua demanda está registrada e acompanhada com atenção. Em breve alguém da Camila Quindere falará com você! ✨
+
+Enquanto aguarda o retorno do time especializado, fico à disposição por aqui para quaisquer outras dúvidas gerais sobre como trabalhamos.
+
+BANCO:
+event id: 6d001e83-695f-4cef-b164-2c34db7a3cb7
+occurred_at: Mon Jul 13 2026 20:32:43 GMT-0300 (Horário Padrão de Brasília)
+lead id: 4a9b385e-b483-4afb-87c5-219960135193
+=== RESULTADO ===
+SMOKE TEST: PASSOU (mensagem recebida, processada pela IA OpenRouter e dados gravados no banco)
